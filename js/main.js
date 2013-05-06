@@ -26,6 +26,14 @@ sideNav = function() {
 		// Add class to body for stying purposes
 		$('body').removeClass('nav-closed').addClass('nav-open');
 		
+		// Animate App
+        if(Modernizr.csstransforms) {
+            $app.css("transform", "translate("+navWidth+"px,0)");
+        }
+        else {
+            $app.css("left",  navWidth+"px");
+        }
+		
 		// Unbind content tap
 		$content.unbind("tap drag release");
 		
@@ -39,6 +47,7 @@ sideNav = function() {
 				
 				// Fire touchEvent
 				touchEvent();
+				
 			}
 			if (event.type === 'release') {
 				console.log('released');
@@ -52,6 +61,9 @@ sideNav = function() {
 		            else {
 		                $app.css("left", "0px");
 		            }	
+					
+					// Fire touchEvent
+					touchEvent();
 				} 
 				else {
 		            if(Modernizr.csstransforms) {
@@ -61,6 +73,7 @@ sideNav = function() {
 		                $app.css("left",  navWidth+"px");
 		            }	
 				}
+				
 			}
 			if (event.type === 'drag') {
 				
@@ -113,6 +126,7 @@ sideNav = function() {
 		        // $app.style.webkitTransform = transform;
 			}
 			
+			
 		});
 		
 		// Set state
@@ -124,6 +138,14 @@ sideNav = function() {
 		
 		// Add class to body for styling purposes
 		$('body').removeClass('nav-open').addClass('nav-closed');
+		
+		// Animate App
+        if(Modernizr.csstransforms) {
+            $app.css("transform", "translate(0px,0)");
+        }
+        else {
+            $app.css("left", "0px");
+        }	
 		
 		// Unbind content tap
 		$content.unbind("tap drag release");
