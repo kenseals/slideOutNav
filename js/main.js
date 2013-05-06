@@ -35,10 +35,10 @@ sideNav = function() {
         }
 		
 		// Unbind content tap
-		$content.unbind("tap drag release");
+		$content.unbind("tap drag dragend");
 		
 		// Bind content tap
-		$content.hammer().on("tap drag release", function(event) {
+		$content.hammer().on("tap drag dragend", function(event) {
 			
 			// Detect event type
 			if (event.type === 'tap') {
@@ -49,7 +49,7 @@ sideNav = function() {
 				touchEvent();
 				
 			}
-			if (event.type === 'release') {
+			if (event.type === 'dragend') {
 				console.log('released');
 				
 				if (Math.abs(event.gesture.deltaX) > navWidth/2) {
@@ -57,6 +57,7 @@ sideNav = function() {
 					
 		            if(Modernizr.csstransforms) {
 		                $app.css("transform", "translate(0px,0)");
+						$app.css("-webkit-transition", "0.2 ease-out");
 		            }
 		            else {
 		                $app.css("left", "0px");
@@ -68,6 +69,7 @@ sideNav = function() {
 				else {
 		            if(Modernizr.csstransforms) {
 		                $app.css("transform", "translate("+navWidth+"px,0)");
+						$app.css("-webkit-transition", "0.2 ease-out");
 		            }
 		            else {
 		                $app.css("left",  navWidth+"px");
@@ -80,7 +82,7 @@ sideNav = function() {
 				// disable browser scrolling
 				event.gesture.preventDefault();
 				
-				console.log('drag!');
+				// console.log('drag!');
 				
 				// Init drag
 				// var posX = event.gesture.deltaX;
@@ -92,24 +94,23 @@ sideNav = function() {
 				
 				
 				// stick to the finger
-                var drag_offset = ((navWidth / 100) - event.gesture.deltaX);
+                var drag_offset = event.gesture.center.pageX;
+				
+				// var drag_offset = ((100/docW)*event.gesture.deltaX) / 1;
 
                 setContainerOffset(drag_offset);
 				
+				// console.log(event.gesture);
 				console.log(drag_offset);
 				
-				function setContainerOffset(pixels, animate) {
+				function setContainerOffset(x) {
 					
-		           	$app.removeClass("animate");
-
-		            if(animate) {
-		                $app.addClass("animate");
-		            }
-		            if(Modernizr.csstransforms) {
-		                $app.css("transform", "translate("+ pixels +"px,0)");
+		            if(Modernizr.csstransforms3d) {
+		                $app.css("transform", "translate3d("+x+"px,0,0)");
+						$app.css("-webkit-transition", "0.1 ease-in");
 		            }
 		            else {
-		                var px = (appWidth / 100) * percent;
+		                var px = (appWidth / 100) * x;
 		                $app.css("left", px+"px");
 		            }
 		        }
@@ -148,14 +149,16 @@ sideNav = function() {
         }	
 		
 		// Unbind content tap
-		$content.unbind("tap drag release");
+		$content.unbind("tap drag dragend");
 		
 		// Set state
 		state.open = false;
 	}
 	this.listen = function() {
 		
-		var hammertime = Hammer(document.body);
+		var hammertime = Hammer(document.body, {
+			drag_lock_to_axis:true
+		});
 		
 		$burger.hammer().on("tap", function(event) {
 			
