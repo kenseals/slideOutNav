@@ -65,6 +65,7 @@ sideNav = function() {
 	
 	var $burger = $('#burger-btn'),
 		$nav = $('.side-nav'),
+		$app = $('.app'),
 		$content = $('.content-pane');
 	
 	state = {
@@ -79,14 +80,38 @@ sideNav = function() {
 		$('body').removeClass('nav-closed').addClass('nav-open');
 		
 		// Unbind content tap
-		$content.unbind("tap");
+		$content.unbind("tap drag");
 		
 		// Bind content tap
-		$content.hammer().on("tap", function(event) {
+		$content.hammer().on("tap drag", function(event) {
 			
-			// Fire touchEvent
-			touchEvent();
-			console.log('content clicked');
+			// Detect event type
+			if (event.type === 'tap') {
+				
+				console.log('tap!');
+				
+				// Fire touchEvent
+				touchEvent();
+			}
+			if (event.type === 'drag') {
+				
+				// disable browser scrolling
+				event.gesture.preventDefault();
+				
+				console.log('drag!');
+				
+				// Init drag
+				posX = event.gesture.deltaX;
+				
+				var transform = "translate3d("+posX+"px, 0)";
+					
+		        $app.style.transform = transform;
+		        $app.style.oTransform = transform;
+		        $app.style.msTransform = transform;
+		        $app.style.mozTransform = transform;
+		        $app.style.webkitTransform = transform;
+			}
+			
 		});
 		
 		// Set state
@@ -100,7 +125,7 @@ sideNav = function() {
 		$('body').removeClass('nav-open').addClass('nav-closed');
 		
 		// Unbind content tap
-		$content.unbind("tap");
+		$content.unbind("tap drag");
 		
 		// Set state
 		state.open = false;
