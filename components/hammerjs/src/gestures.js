@@ -116,8 +116,8 @@ Hammer.gestures.Hold = {
     name: 'hold',
     index: 10,
     defaults: {
-        hold_timeout: 500,
-        hold_threshold: 1
+        hold_timeout	: 500,
+        hold_threshold	: 1
     },
     timer: null,
     handler: function holdGesture(ev, inst) {
@@ -162,15 +162,17 @@ Hammer.gestures.Tap = {
     name: 'tap',
     index: 100,
     defaults: {
-        tap_max_touchtime  : 250,
-        tap_max_distance   : 10,
-        doubletap_distance : 20,
-        doubletap_interval : 300
+        tap_max_touchtime	: 250,
+        tap_max_distance	: 10,
+		tap_always			: true,
+        doubletap_distance	: 20,
+        doubletap_interval	: 300
     },
     handler: function tapGesture(ev, inst) {
         if(ev.eventType == Hammer.EVENT_END) {
             // previous gesture, for the double tap since these are two different gesture detections
-            var prev = Hammer.detection.previous;
+            var prev = Hammer.detection.previous,
+				did_doubletap = false;
 
             // when the touchtime is higher then the max touch time
             // or when the moving distance is too much
@@ -183,13 +185,15 @@ Hammer.gestures.Tap = {
             if(prev && prev.name == 'tap' &&
                 (ev.timeStamp - prev.lastEvent.timeStamp) < inst.options.doubletap_interval &&
                 ev.distance < inst.options.doubletap_distance) {
-                Hammer.detection.current.name = 'doubletap';
-            }
-            else {
-                Hammer.detection.current.name = 'tap';
+				inst.trigger('doubletap', ev);
+				did_doubletap = true;
             }
 
-            inst.trigger(Hammer.detection.current.name, ev);
+			// do a single tap
+			if(!did_doubletap || inst.options.tap_always) {
+				Hammer.detection.current.name = 'tap';
+				inst.trigger(Hammer.detection.current.name, ev);
+			}
         }
     }
 };
@@ -250,7 +254,10 @@ Hammer.gestures.Drag = {
         drag_block_vertical     : false,
         // drag_lock_to_axis keeps the drag gesture on the axis that it started on,
         // It disallows vertical directions if the initial direction was horizontal, and vice versa.
-        drag_lock_to_axis       : false
+        drag_lock_to_axis       : false,
+        // drag lock only kicks in when distance > drag_lock_min_distance
+        // This way, locking occurs only when the distance has become large enough to reliably determine the direction
+        drag_lock_min_distance : 25
     },
     triggered: false,
     handler: function dragGesture(ev, inst) {
@@ -285,8 +292,11 @@ Hammer.gestures.Drag = {
                 Hammer.detection.current.name = this.name;
 
                 // lock drag to axis?
+                if(Hammer.detection.current.lastEvent.drag_locked_to_axis || (inst.options.drag_lock_to_axis && inst.options.drag_lock_min_distance<=ev.distance)) {
+                    ev.drag_locked_to_axis = true;
+                }
                 var last_direction = Hammer.detection.current.lastEvent.direction;
-                if(inst.options.drag_lock_to_axis && last_direction !== ev.direction) {
+                if(ev.drag_locked_to_axis && last_direction !== ev.direction) {
                     // keep direction on the axis that the drag gesture started on
                     if(Hammer.utils.isVertical(last_direction)) {
                         ev.direction = (ev.deltaY < 0) ? Hammer.DIRECTION_UP : Hammer.DIRECTION_DOWN;
