@@ -66,11 +66,14 @@ sideNav = function() {
 	var $burger = $('#burger-btn'),
 		$nav = $('.side-nav'),
 		$app = $('.app'),
+		navWidth = $nav.width();
 		$content = $('.content-pane');
 	
 	state = {
 		open:false
 	}
+	
+	console.log(navWidth);
 	
 	this.open = function() {
 		
@@ -80,10 +83,10 @@ sideNav = function() {
 		$('body').removeClass('nav-closed').addClass('nav-open');
 		
 		// Unbind content tap
-		$content.unbind("tap drag");
+		$content.unbind("tap drag release");
 		
 		// Bind content tap
-		$content.hammer().on("tap drag", function(event) {
+		$content.hammer().on("tap drag release", function(event) {
 			
 			// Detect event type
 			if (event.type === 'tap') {
@@ -93,6 +96,28 @@ sideNav = function() {
 				// Fire touchEvent
 				touchEvent();
 			}
+			if (event.type === 'release') {
+				console.log('released');
+				
+				if (Math.abs(event.gesture.deltaX) > navWidth/2) {
+					console.log('more than 50%');
+					
+		            if(Modernizr.csstransforms) {
+		                $app.css("transform", "translate(0px,0)");
+		            }
+		            else {
+		                $app.css("left", "0px");
+		            }	
+				} 
+				else {
+		            if(Modernizr.csstransforms) {
+		                $app.css("transform", "translate("+navWidth+"px,0)");
+		            }
+		            else {
+		                $app.css("left",  navWidth+"px");
+		            }	
+				}
+			}
 			if (event.type === 'drag') {
 				
 				// disable browser scrolling
@@ -101,15 +126,47 @@ sideNav = function() {
 				console.log('drag!');
 				
 				// Init drag
-				posX = event.gesture.deltaX;
+				// var posX = event.gesture.deltaX;
 				
-				var transform = "translate3d("+posX+"px, 0)";
+				// console.log(posX);
+				
+				// $app.css('-webkit-transform', 'translate('+posX+'px, 0)');
+				
+				
+				
+				// stick to the finger
+                var drag_offset = ((navWidth / 100) - event.gesture.deltaX);
+
+                setContainerOffset(drag_offset);
+				
+				console.log(drag_offset);
+				
+				function setContainerOffset(pixels, animate) {
 					
-		        $app.style.transform = transform;
-		        $app.style.oTransform = transform;
-		        $app.style.msTransform = transform;
-		        $app.style.mozTransform = transform;
-		        $app.style.webkitTransform = transform;
+		           	$app.removeClass("animate");
+
+		            if(animate) {
+		                $app.addClass("animate");
+		            }
+		            if(Modernizr.csstransforms) {
+		                $app.css("transform", "translate("+ pixels +"px,0)");
+		            }
+		            else {
+		                var px = (appWidth / 100) * percent;
+		                $app.css("left", px+"px");
+		            }
+		        }
+				
+				
+				
+				
+				
+				// var transform = "translate3d(50px, 0)";	
+		        // $app.style.transform = transform;
+		        // $app.style.oTransform = transform;
+		        // $app.style.msTransform = transform;
+		        // $app.style.mozTransform = transform;
+		        // $app.style.webkitTransform = transform;
 			}
 			
 		});
@@ -125,7 +182,7 @@ sideNav = function() {
 		$('body').removeClass('nav-open').addClass('nav-closed');
 		
 		// Unbind content tap
-		$content.unbind("tap drag");
+		$content.unbind("tap drag release");
 		
 		// Set state
 		state.open = false;
