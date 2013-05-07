@@ -17,8 +17,6 @@ sideNav = function() {
 		open:false
 	}
 	
-	console.log(navWidth);
-	
 	this.open = function() {
 		
 		console.log('open');
@@ -83,52 +81,29 @@ sideNav = function() {
 				// disable browser scrolling
 				event.gesture.preventDefault();
 				
-				// console.log('drag!');
-				
-				// Init drag
-				// var posX = event.gesture.deltaX;
-				
-				// console.log(posX);
-				
-				// $app.css('-webkit-transform', 'translate('+posX+'px, 0)');
-				
-				
-				
 				// stick to the finger
-                var drag_offset = event.gesture.center.pageX,
-					btn_offset = navWidth * 0.03;
+                var dragOffset = event.gesture.center.pageX,
+					dragStart = event.gesture.startEvent.center.pageX,
+					offset = dragOffset - (dragStart - navWidth);
+					
+				// Move app container
+                moveAppContainer(offset);
 				
-				// var drag_offset = ((100/docW)*event.gesture.deltaX) / 1;
-
-                setContainerOffset(drag_offset - btn_offset);
-				
-				// console.log(event.gesture);
-				
-				
-				console.log(drag_offset);
-				
-				function setContainerOffset(x) {
+				function moveAppContainer(offset) {
 					
 		            if(Modernizr.csstransforms3d) {
-		                $app.css("transform", "translate3d("+x+"px,0,0)");
-						$app.css("-webkit-transition", "0s ease-in");
+		                $app.css("transform", "translate3d("+offset+"px,0,0)");
 		            }
+					else if (Modernizr.csstransforms) {
+		                $app.css("transform", "translate("+offset+"px,0)");
+					}
 		            else {
-		                var px = (appWidth / 100) * x;
-		                $app.css("left", px+"px");
+		                $app.css("left", offset+"px");
 		            }
+					
+					$app.css("-webkit-transition", "0s ease-in");
 		        }
 				
-				
-				
-				
-				
-				// var transform = "translate3d(50px, 0)";	
-		        // $app.style.transform = transform;
-		        // $app.style.oTransform = transform;
-		        // $app.style.msTransform = transform;
-		        // $app.style.mozTransform = transform;
-		        // $app.style.webkitTransform = transform;
 			}
 			
 			
@@ -184,8 +159,11 @@ sideNav = function() {
 		// Close nav.
 		else {
 			this.close();
-		}
-		
+		}	
+	}
+	
+	function matrixToArray(matrix) {
+	    return matrix.substr(7, matrix.length - 8).split(', ');
 	}
 	
 	// Init listen
