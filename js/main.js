@@ -95,13 +95,16 @@ sideNav = function() {
 				
 				
 				// stick to the finger
-                var drag_offset = event.gesture.center.pageX;
+                var drag_offset = event.gesture.center.pageX,
+					btn_offset = navWidth * 0.03;
 				
 				// var drag_offset = ((100/docW)*event.gesture.deltaX) / 1;
 
-                setContainerOffset(drag_offset);
+                setContainerOffset(drag_offset - btn_offset);
 				
 				// console.log(event.gesture);
+				
+				
 				console.log(drag_offset);
 				
 				function setContainerOffset(x) {
