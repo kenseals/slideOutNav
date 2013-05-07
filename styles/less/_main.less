@@ -1,9 +1,20 @@
+body {
+	display:block;
+	position:relative;
+	height:100%;
+	-webkit-overflow-scrolling: touch;
+}
+
+/* apply a natural box layout model to all elements */
+* { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
 .container {
 	display:block;
 	position:relative;
 	min-height:480px;
+	width:100%;
 	background:#1c1c1c;
-	overflow-x:hidden;
+	overflow:hidden;
 }
 
 .side-nav {
@@ -13,6 +24,8 @@
 	width:@navW;
 	height:100%;
 	background:#1c1c1c;
+	overflow-x:hidden;
+	overflow-y:scroll;
 }
 .side-nav li {
 	diplay:block;
@@ -26,15 +39,19 @@
 .app {
 	display:block;
 	position:absolute;
+	top:0;
+	left:0;
 	z-index:2;
 	height:100%;
 	width:100%;
+	padding:0;
 	background:white;
 	.drop-shadow (-2px, 0, 8px, 2px, 0.95);
 }
 .app-header {
 	display:block;
 	position:relative;
+	width:100%;
 	background:#1c1c1c;
 	padding:0.4em 3%;
 }
@@ -42,15 +59,18 @@
 	display:block;
 	position:relative;
 	vertical-align:middle;
-	width:40px;
+	width:60px;
 	height:40px;
 	text-align:center;
 	font-size:1.5em;
 	line-height:40px;
 	color:white;
-	background:none;
+	background:url(../../img/burger-btn.svg) no-repeat 50% 50%;
+	background-size:40% auto;
 	border:none;
 	cursor:pointer;
+	border:solid 1px #484848;
+	.border-radius(3px);
 }
 .content-pane {
 	display:block;
