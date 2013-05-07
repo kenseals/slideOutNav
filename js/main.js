@@ -29,6 +29,7 @@ sideNav = function() {
 		// Animate App
         if(Modernizr.csstransforms) {
             $app.css("transform", "translate("+navWidth+"px,0)");
+			$app.css("-webkit-transition", "0.2s ease-out");
         }
         else {
             $app.css("left",  navWidth+"px");
@@ -57,7 +58,7 @@ sideNav = function() {
 					
 		            if(Modernizr.csstransforms) {
 		                $app.css("transform", "translate(0px,0)");
-						$app.css("-webkit-transition", "0.2 ease-out");
+						$app.css("-webkit-transition", "0.2s ease-out");
 		            }
 		            else {
 		                $app.css("left", "0px");
@@ -69,7 +70,7 @@ sideNav = function() {
 				else {
 		            if(Modernizr.csstransforms) {
 		                $app.css("transform", "translate("+navWidth+"px,0)");
-						$app.css("-webkit-transition", "0.2 ease-out");
+						$app.css("-webkit-transition", "0.2s ease-out");
 		            }
 		            else {
 		                $app.css("left",  navWidth+"px");
@@ -107,7 +108,7 @@ sideNav = function() {
 					
 		            if(Modernizr.csstransforms3d) {
 		                $app.css("transform", "translate3d("+x+"px,0,0)");
-						$app.css("-webkit-transition", "0.1 ease-in");
+						$app.css("-webkit-transition", "0s ease-in");
 		            }
 		            else {
 		                var px = (appWidth / 100) * x;
@@ -143,6 +144,7 @@ sideNav = function() {
 		// Animate App
         if(Modernizr.csstransforms) {
             $app.css("transform", "translate(0px,0)");
+			$app.css("-webkit-transition", "0.2s ease-out");
         }
         else {
             $app.css("left", "0px");
