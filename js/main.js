@@ -1,7 +1,10 @@
 $(document).ready(function(){
 	
 	// Init sideNav
-	$('body').sideNav();
+	$('body').sideNav({
+		dragOpen:true,
+		dragClose:true
+	});
 	
 	// Save so its public methods are accessible
 	var sideNav = $('body').data('sideNav');
@@ -27,41 +30,36 @@ $(document).ready(function(){
 	
 		var defaults = {
 			dataAttrs: false,
-			nameSpace: {
-				prefix: "side-nav",
-				burger: "burger",
-				nav: "nav",
-				app: "app",
-				content: "content"
-			},
-			events: {
-				clickOpen: true,
-				clickClose: true,
-				dragOpen: false,
-				dragClose: true,
-			}
+			prefix: "side-nav",
+			burger: "burger",
+			nav: "nav",
+			app: "app",
+			content: "content",
+			clickOpen: true,
+			clickClose: true,
+			dragOpen: false,
+			dragClose: true
 		};
 	
-		var config = $.extend(defaults, options || {});
+		var config = $.extend(defaults, options || {})
 
 		var state = {
 			open:false
 		};
 		
-		var events = {
-			tap: "",
-			drag: "",
-			dragend: ""
+		var eventNames = {
+			tap: "tap",
+			drag: "drag dragend"
 		};
 	
-		var prefix = "data-"+config.nameSpace.prefix,
-			burger = config.nameSpace.burger,
-			nav = config.nameSpace.nav,
-			app = config.nameSpace.app,
-			content = config.nameSpace.content,
-			eventList = events.tap+events.drag+events.dragend,
-			openEvents = "",
-			closeEvents = "",
+		var prefix = "data-"+config.prefix,
+			burger = config.burger,
+			nav = config.nav,
+			app = config.app,
+			content = config.content,
+			eventList = eventNames.tap+eventNames.drag,
+			openEvents = openEvents,
+			closeEvents = closeEvents;
 		
 		if (config.dataAttrs === false) {
 		
@@ -82,19 +80,41 @@ $(document).ready(function(){
 		
 		
 		// Parse through passed events to determine what events we're using
-		(function eventSetup() {
-			if (config.events.clickOpen == true) {
-				tap = "tap";
-			} else if (config.events.clickClose == true) {
-				tap = "tap";
-			} else if (config.events.dragOpen == true) {
-				drag = "drag",
-				dragend = "dragend";
-			} else if (config.events.dragClose == true) {
-				drag = "drag",
-				dragend = "dragend";
+		(function eventSetup() {	
+			if (config.clickOpen == true) {
+				
+				openEvents = eventNames.tap;
+			
+			} 
+			if (config.clickClose == true) {
+				
+				closeEvents = eventNames.tap;
+			
+			} 
+			if (config.dragOpen == true) {
+			
+				openEvents = eventNames.drag;
+			
+			} 
+			if (config.dragClose == true) {
+			
+				closeEvents = eventNames.drag;
+			
+			} 
+			if (config.clickOpen == true && config.dragOpen == true) {
+			
+				openEvents = eventNames.tap+" "+eventNames.drag;
+			
+			} 
+			if (config.clickClose == true && config.dragClose == true) {
+			
+				closeEvents = eventNames.tap+" "+eventNames.drag;
+			
 			}
-		}();
+			
+			console.log("open events: "+openEvents);
+			console.log("close events: "+closeEvents);
+		})();
 
 		this.open = function() {
 
@@ -216,10 +236,74 @@ $(document).ready(function(){
 		this.listen = function() {
 
 			// Bind tap event to burger button
-			$burger.hammer().on(openEvents, function(event) {
+			$content.hammer().on(openEvents, function(event) {
 	
-				// Fire touchEvent
-				touchEvent();
+				// Detect event type
+				if (event.type === 'tap') {
+		
+					console.log('tap!');
+		
+					// Fire touchEvent
+					touchEvent();
+		
+				}
+				if (event.type === 'dragend') {
+					console.log('released');
+		
+					if (Math.abs(event.gesture.deltaX) > navWidth/2) {
+						console.log('more than 50%');
+			
+			            if(Modernizr.csstransforms) {
+			                $app.css("transform", "translate("+navWidth+",0)");
+							$app.css("-webkit-transition", "0.2s ease-out");
+			            }
+			            else {
+			                $app.css("left", "0px");
+			            }	
+			
+						// Fire touchEvent
+						touchEvent();
+					} 
+					else {
+			            if(Modernizr.csstransforms) {
+			                $app.css("transform", "translate(0px,0)");
+							$app.css("-webkit-transition", "0.2s ease-out");
+			            }
+			            else {
+			                $app.css("left",  navWidth+"px");
+			            }	
+					}
+		
+				}
+				if (event.type === 'drag') {
+		
+					// disable browser scrolling
+					event.gesture.preventDefault();
+		
+					// stick to the finger
+	                var dragOffset = event.gesture.center.pageX,
+						dragStart = event.gesture.startEvent.center.pageX,
+						offset = dragOffset - (dragStart - navWidth);
+			
+					// Move app container
+	                moveAppContainer(offset);
+		
+					function moveAppContainer(offset) {
+			
+			            if(Modernizr.csstransforms3d) {
+			                $app.css("transform", "translate3d("+offset+"px,0,0)");
+			            }
+						else if (Modernizr.csstransforms) {
+			                $app.css("transform", "translate("+offset+"px,0)");
+						}
+			            else {
+			                $app.css("left", offset+"px");
+			            }
+			
+						$app.css("-webkit-transition", "0s ease-in");
+			        }
+		
+				}
 			
 			});
 
