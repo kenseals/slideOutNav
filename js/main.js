@@ -8,6 +8,8 @@ $(document).ready(function(){
 	
 	// Example click event calling sideNav public method
 	$('#example').add('#nav a').click(function(){
+		
+		// Call var to access public methods
 		sideNav.close();
 		
 		// Make sure not to return href
@@ -25,11 +27,19 @@ $(document).ready(function(){
 	
 		var defaults = {
 			dataAttrs: false,
-			prefix: "side-nav",
-			burger: "burger",
-			nav: "nav",
-			app: "app",
-			content: "content"
+			nameSpace: {
+				prefix: "side-nav",
+				burger: "burger",
+				nav: "nav",
+				app: "app",
+				content: "content"
+			},
+			events: {
+				clickOpen: true,
+				clickClose: true,
+				dragOpen: false,
+				dragClose: true,
+			}
 		};
 	
 		var config = $.extend(defaults, options || {});
@@ -38,11 +48,11 @@ $(document).ready(function(){
 			open:false
 		};
 	
-		var prefix = "data-"+config.prefix,
-			burger = config.burger,
-			nav = config.nav,
-			app = config.app,
-			content = config.content;
+		var prefix = "data-"+config.nameSpace.prefix,
+			burger = config.nameSpace.burger,
+			nav = config.nameSpace.nav,
+			app = config.nameSpace.app,
+			content = config.nameSpace.content;
 		
 		if (config.dataAttrs === false) {
 		
