@@ -47,12 +47,21 @@ $(document).ready(function(){
 		var state = {
 			open:false
 		};
+		
+		var events = {
+			tap: "",
+			drag: "",
+			dragend: ""
+		};
 	
 		var prefix = "data-"+config.nameSpace.prefix,
 			burger = config.nameSpace.burger,
 			nav = config.nameSpace.nav,
 			app = config.nameSpace.app,
-			content = config.nameSpace.content;
+			content = config.nameSpace.content,
+			eventList = events.tap+events.drag+events.dragend,
+			openEvents = "",
+			closeEvents = "",
 		
 		if (config.dataAttrs === false) {
 		
@@ -71,6 +80,21 @@ $(document).ready(function(){
 				navWidth = $nav.width();
 		}
 		
+		
+		// Parse through passed events to determine what events we're using
+		(function eventSetup() {
+			if (config.events.clickOpen == true) {
+				tap = "tap";
+			} else if (config.events.clickClose == true) {
+				tap = "tap";
+			} else if (config.events.dragOpen == true) {
+				drag = "drag",
+				dragend = "dragend";
+			} else if (config.events.dragClose == true) {
+				drag = "drag",
+				dragend = "dragend";
+			}
+		}();
 
 		this.open = function() {
 
@@ -89,10 +113,10 @@ $(document).ready(function(){
 	        }
 
 			// Unbind content tap
-			$content.unbind("tap drag dragend");
+			$content.unbind(closeEvents);
 
 			// Bind content tap
-			$content.hammer().on("tap drag dragend", function(event) {
+			$content.hammer().on(closeEvents, function(event) {
 	
 				// Detect event type
 				if (event.type === 'tap') {
@@ -184,7 +208,7 @@ $(document).ready(function(){
 	        }	
 
 			// Unbind content tap
-			$content.unbind("tap drag dragend");
+			$content.unbind("closeEvents");
 
 			// Set state
 			state.open = false;
@@ -192,7 +216,7 @@ $(document).ready(function(){
 		this.listen = function() {
 
 			// Bind tap event to burger button
-			$burger.hammer().on("tap", function(event) {
+			$burger.hammer().on(openEvents, function(event) {
 	
 				// Fire touchEvent
 				touchEvent();
