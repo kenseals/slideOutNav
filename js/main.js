@@ -236,6 +236,11 @@ $(document).ready(function(){
 		this.listen = function() {
 
 			// Bind tap event to burger button
+			$burger.hammer().on(tap, function(event) {
+				
+			});
+			
+			// Bind content selector
 			$content.hammer().on(openEvents, function(event) {
 	
 				// Detect event type
