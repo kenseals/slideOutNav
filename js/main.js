@@ -2,8 +2,7 @@ $(document).ready(function(){
 	
 	// Init sideNav
 	$('body').sideNav({
-		dragOpen:true,
-		dragClose:true
+		dragOpen: true
 	});
 	
 	// Save so its public methods are accessible
@@ -57,9 +56,7 @@ $(document).ready(function(){
 			nav = config.nav,
 			app = config.app,
 			content = config.content,
-			eventList = eventNames.tap+eventNames.drag,
-			openEvents = openEvents,
-			closeEvents = closeEvents;
+			eventList = eventNames.tap+" "+eventNames.drag;
 		
 		if (config.dataAttrs === false) {
 		
@@ -77,44 +74,6 @@ $(document).ready(function(){
 				$content = $('['+prefix+'="'+content+'"]'),
 				navWidth = $nav.width();
 		}
-		
-		
-		// Parse through passed events to determine what events we're using
-		(function eventSetup() {	
-			if (config.clickOpen == true) {
-				
-				openEvents = eventNames.tap;
-			
-			} 
-			if (config.clickClose == true) {
-				
-				closeEvents = eventNames.tap;
-			
-			} 
-			if (config.dragOpen == true) {
-			
-				openEvents = eventNames.drag;
-			
-			} 
-			if (config.dragClose == true) {
-			
-				closeEvents = eventNames.drag;
-			
-			} 
-			if (config.clickOpen == true && config.dragOpen == true) {
-			
-				openEvents = eventNames.tap+" "+eventNames.drag;
-			
-			} 
-			if (config.clickClose == true && config.dragClose == true) {
-			
-				closeEvents = eventNames.tap+" "+eventNames.drag;
-			
-			}
-			
-			console.log("open events: "+openEvents);
-			console.log("close events: "+closeEvents);
-		})();
 
 		this.open = function() {
 
@@ -124,89 +83,22 @@ $(document).ready(function(){
 			$('body').removeClass('nav-closed').addClass('nav-open');
 
 			// Animate App
-	        if(Modernizr.csstransforms) {
-	            $app.css("transform", "translate("+navWidth+"px,0)");
-				$app.css("-webkit-transition", "0.2s ease-out");
-	        }
-	        else {
-	            $app.css("left",  navWidth+"px");
-	        }
-
-			// Unbind content tap
-			$content.unbind(closeEvents);
-
-			// Bind content tap
-			$content.hammer().on(closeEvents, function(event) {
-	
-				// Detect event type
-				if (event.type === 'tap') {
-		
-					console.log('tap!');
-		
-					// Fire touchEvent
-					touchEvent();
-		
-				}
-				if (event.type === 'dragend') {
-					console.log('released');
-		
-					if (Math.abs(event.gesture.deltaX) > navWidth/2) {
-						console.log('more than 50%');
+	        openAnim();
 			
-			            if(Modernizr.csstransforms) {
-			                $app.css("transform", "translate(0px,0)");
-							$app.css("-webkit-transition", "0.2s ease-out");
-			            }
-			            else {
-			                $app.css("left", "0px");
-			            }	
+			// Unbind close events
+			$content.unbind(eventList);
 			
-						// Fire touchEvent
-						touchEvent();
-					} 
-					else {
-			            if(Modernizr.csstransforms) {
-			                $app.css("transform", "translate("+navWidth+"px,0)");
-							$app.css("-webkit-transition", "0.2s ease-out");
-			            }
-			            else {
-			                $app.css("left",  navWidth+"px");
-			            }	
-					}
-		
-				}
-				if (event.type === 'drag') {
-		
-					// disable browser scrolling
-					event.gesture.preventDefault();
-		
-					// stick to the finger
-	                var dragOffset = event.gesture.center.pageX,
-						dragStart = event.gesture.startEvent.center.pageX,
-						offset = dragOffset - (dragStart - navWidth);
+			if (config.dragClose == true){
+					
+				// bind drag event for close
+				dragListen();	
+			}
 			
-					// Move app container
-	                moveAppContainer(offset);
-		
-					function moveAppContainer(offset) {
-			
-			            if(Modernizr.csstransforms3d) {
-			                $app.css("transform", "translate3d("+offset+"px,0,0)");
-			            }
-						else if (Modernizr.csstransforms) {
-			                $app.css("transform", "translate("+offset+"px,0)");
-						}
-			            else {
-			                $app.css("left", offset+"px");
-			            }
-			
-						$app.css("-webkit-transition", "0s ease-in");
-			        }
-		
-				}
-	
-	
-			});
+			if (config.clickClose == true) {
+				
+				// bind click event for close
+				contentClickListen();
+			}
 
 			// Set state
 			state.open = true;
@@ -219,116 +111,180 @@ $(document).ready(function(){
 			$('body').removeClass('nav-open').addClass('nav-closed');
 
 			// Animate App
-	        if(Modernizr.csstransforms) {
-	            $app.css("transform", "translate(0px,0)");
-				$app.css("-webkit-transition", "0.2s ease-out");
-	        }
-	        else {
-	            $app.css("left", "0px");
-	        }	
+	        closeAnim();	
 
-			// Unbind content tap
-			$content.unbind("closeEvents");
+			// Unbind content click events
+			$content.unbind(eventNames.tap);
 
 			// Set state
 			state.open = false;
 		}
 		this.listen = function() {
-
-			// Bind tap event to burger button
-			$burger.hammer().on(tap, function(event) {
-				
-			});
 			
-			// Bind content selector
-			$content.hammer().on(openEvents, function(event) {
-	
-				// Detect event type
-				if (event.type === 'tap') {
-		
-					console.log('tap!');
-		
-					// Fire touchEvent
-					touchEvent();
-		
-				}
-				if (event.type === 'dragend') {
-					console.log('released');
-		
-					if (Math.abs(event.gesture.deltaX) > navWidth/2) {
-						console.log('more than 50%');
+			if (config.clickOpen == true) {
 			
-			            if(Modernizr.csstransforms) {
-			                $app.css("transform", "translate("+navWidth+",0)");
-							$app.css("-webkit-transition", "0.2s ease-out");
-			            }
-			            else {
-			                $app.css("left", "0px");
-			            }	
+				// call burgerListen
+				burgerListen();
+			} 
 			
-						// Fire touchEvent
-						touchEvent();
-					} 
-					else {
-			            if(Modernizr.csstransforms) {
-			                $app.css("transform", "translate(0px,0)");
-							$app.css("-webkit-transition", "0.2s ease-out");
-			            }
-			            else {
-			                $app.css("left",  navWidth+"px");
-			            }	
-					}
-		
-				}
-				if (event.type === 'drag') {
-		
-					// disable browser scrolling
-					event.gesture.preventDefault();
-		
-					// stick to the finger
-	                var dragOffset = event.gesture.center.pageX,
-						dragStart = event.gesture.startEvent.center.pageX,
-						offset = dragOffset - (dragStart - navWidth);
+			if (config.dragOpen == true) {
 			
-					// Move app container
-	                moveAppContainer(offset);
-		
-					function moveAppContainer(offset) {
+				// call dragListen
+				dragListen();	
+			}
 			
-			            if(Modernizr.csstransforms3d) {
-			                $app.css("transform", "translate3d("+offset+"px,0,0)");
-			            }
-						else if (Modernizr.csstransforms) {
-			                $app.css("transform", "translate("+offset+"px,0)");
-						}
-			            else {
-			                $app.css("left", offset+"px");
-			            }
-			
-						$app.css("-webkit-transition", "0s ease-in");
-			        }
-		
-				}
-			
-			});
-
 			console.log('listening');
-		}
+		};
+		
+		
 
-		function touchEvent() {
+		var touchEvent = function() {
 
 			// If closed, open nav.
-			if (state.open === false) {
-				console.log('state closed');
+			if (state.open == false) {
+				console.log('opening');
 				obj.open();
 			}
 
 			// Close nav.
 			else {
-				console.log('state open');
+				console.log('closing');
 				obj.close();
 			}	
+		};
+		
+		var burgerListen = function() {
+			
+			console.log('burger listen');
+			
+			// Bind tap event to burger button
+			$burger.hammer().on(eventNames.tap, function(event) {
+			
+				console.log('tap!');
+
+				// Fire touchEvent
+				touchEvent();
+			
+			});
 		}
+		
+		var contentClickListen = function() {
+			
+			console.log('content click listen');
+			
+			// Bind tap event to burger button
+			$content.hammer().on(eventNames.tap, function(event) {
+			
+				console.log('tap!');
+
+				// Fire touchEvent
+				touchEvent();
+			
+			});
+		}
+		
+		var dragListen = function() {
+			
+			console.log('drag listen');
+			
+			// Bind drag event to content
+			$content.hammer().on(eventNames.drag, function(event) {
+			
+				// If drag
+				if (event.type === 'drag') {
+	
+					// disable browser scrolling
+					event.gesture.preventDefault();
+	
+					// stick to the finger
+	                var dragOffset = event.gesture.center.pageX,
+						dragStart = event.gesture.startEvent.center.pageX,
+						offset = offset;
+						
+						if (state.open === true) {
+							var offset = dragOffset - (dragStart - navWidth);
+						} else {
+							var offset = dragOffset - dragStart;
+						}
+						
+					// Move app container
+	                moveAppContainer(offset);
+				}
+			
+				// If drag end
+				if (event.type === 'dragend') {
+					
+					console.log('released');
+	
+					if (Math.abs(event.gesture.deltaX) > navWidth/2) {
+						console.log('more than 50%');
+						
+						if (state.open === true) {
+							
+							closeAnim();
+						} else {
+							
+							openAnim();
+						}
+		
+						// Fire touchEvent
+						touchEvent();
+					} else {
+						
+						if (state.open === true) {
+							
+							openAnim();
+						} else {
+							
+							closeAnim();
+						}
+					}
+				}
+			});
+		}
+		
+		var closeAnim = function() {
+		
+            if(Modernizr.csstransforms) {
+                $app.css("transform", "translate(0,0)");
+				$app.css("-webkit-transition", "0.2s ease-out");
+            }
+            else {
+                $app.css("left", "0px");
+            }
+			
+			console.log('close anim');
+		}	
+		
+		var openAnim = function() {
+			
+			console.log('navW = '+navWidth);
+			
+            if(Modernizr.csstransforms) {
+                $app.css("transform", "translate("+navWidth+"px,0)");
+				$app.css("-webkit-transition", "0.2s ease-out");
+            }
+            else {
+                $app.css("left",  navWidth+"px");
+            }
+			
+			console.log('open anim');
+		}
+		
+		var moveAppContainer = function(offset) {
+
+            if(Modernizr.csstransforms3d) {
+                $app.css("transform", "translate3d("+offset+"px,0,0)");
+            }
+			else if (Modernizr.csstransforms) {
+                $app.css("transform", "translate("+offset+"px,0)");
+			}
+            else {
+                $app.css("left", offset+"px");
+            }
+
+			$app.css("-webkit-transition", "0s ease-in");
+        }
 	
 		// Start listening for open event
 		this.listen();
