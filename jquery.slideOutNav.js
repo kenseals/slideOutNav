@@ -222,13 +222,19 @@
 		
 		var closeAnim = function() {
 		
-            if(Modernizr.csstransforms) {
+            if (Modernizr.csstransforms3d) {
+                
+				$app.css("transform", "translate3d(0,0,0)");
+            
+			} else if(Modernizr.csstransforms) {
+				
                 $app.css("transform", "translate(0,0)");
 				$app.css("-webkit-transition", "0.2s ease-out");
-            }
-            else {
+            } else {
                 $app.css("left", "0px");
             }
+			
+			$app.css("-webkit-transition", "0.2s ease-out");
 			
 			console.log('close anim');
 		};	
@@ -237,13 +243,18 @@
 			
 			console.log('navW = '+navWidth);
 			
-            if(Modernizr.csstransforms) {
+            if (Modernizr.csstransforms3d) {
+				
+                $app.css("transform", "translate3d("+navWidth+"px,0,0)");
+				
+            } else if (Modernizr.csstransforms) {
+				
                 $app.css("transform", "translate("+navWidth+"px,0)");
-				$app.css("-webkit-transition", "0.2s ease-out");
-            }
-            else {
+            } else {
                 $app.css("left",  navWidth+"px");
             }
+			
+			$app.css("-webkit-transition", "0.2s ease-out");
 			
 			console.log('open anim');
 		};
