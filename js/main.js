@@ -1,18 +1,18 @@
 $(document).ready(function(){
 	
 	// Init sideNav
-	$('body').sideNav({
+	$('body').slideOutNav({
 		dragOpen: true
 	});
 	
 	// Save so its public methods are accessible
-	var sideNav = $('body').data('sideNav');
+	var slideOutNav = $('body').data('slideOutNav');
 	
 	// Example click event calling sideNav public method
 	$('#example').add('#nav a').click(function(){
 		
 		// Call var to access public methods
-		sideNav.close();
+		slideOutNav.close();
 		
 		// Make sure not to return href
 		return false;
@@ -23,7 +23,7 @@ $(document).ready(function(){
 
 
 (function($){	
-	var SideNav = function(element, options){
+	var SlideOutNav = function(element, options){
 	    var elem = $(element),
 	    	obj = this;
 	
@@ -291,18 +291,18 @@ $(document).ready(function(){
 	
 	};
 
-	$.fn.sideNav = function(options){
+	$.fn.slideOutNav = function(options){
 		return this.each(function(){
 			var element = $(this);
 
 			// Return early if this element already has a plugin instance
-			if (element.data('sideNav')) return;
+			if (element.data('slideOutNav')) return;
 
 			// pass options to plugin constructor
-			var sideNav = new SideNav(this, options);
+			var slideOutNav = new SlideOutNav(this, options);
 
 			// Store plugin object in this element's data
-			element.data('sideNav', sideNav);
+			element.data('slideOutNav', slideOutNav);
 		});
 	};
 })(jQuery);
