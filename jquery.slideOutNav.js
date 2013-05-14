@@ -16,7 +16,7 @@
 			dragClose: true
 		};
 	
-		var config = $.extend(defaults, options || {})
+		var config = $.extend(defaults, options || {});
 
 		var state = {
 			open:false
@@ -41,15 +41,14 @@
 				$app = $('#'+app),
 				$content = $('#'+content),
 				navWidth = $nav.width();
-		}
-		else {
+		} else {
 		
 			var $burger = $('['+prefix+'="'+burger+'"]'),
 				$nav = $('['+prefix+'="'+nav+'"]'),
 				$app = $('['+prefix+'="'+app+'"]'),
 				$content = $('['+prefix+'="'+content+'"]'),
 				navWidth = $nav.width();
-		}
+		};
 
 		this.open = function() {
 
@@ -78,7 +77,8 @@
 
 			// Set state
 			state.open = true;
-		}
+		};
+		
 		this.close = function() {
 
 			console.log('close');
@@ -94,7 +94,8 @@
 
 			// Set state
 			state.open = false;
-		}
+		};
+		
 		this.listen = function() {
 			
 			if (config.clickOpen == true) {
@@ -142,7 +143,7 @@
 				touchEvent();
 			
 			});
-		}
+		};
 		
 		var contentClickListen = function() {
 			
@@ -157,7 +158,7 @@
 				touchEvent();
 			
 			});
-		}
+		};
 		
 		var dragListen = function() {
 			
@@ -217,7 +218,7 @@
 					}
 				}
 			});
-		}
+		};
 		
 		var closeAnim = function() {
 		
@@ -230,7 +231,7 @@
             }
 			
 			console.log('close anim');
-		}	
+		};	
 		
 		var openAnim = function() {
 			
@@ -245,7 +246,7 @@
             }
 			
 			console.log('open anim');
-		}
+		};
 		
 		var moveAppContainer = function(offset) {
 
@@ -260,7 +261,7 @@
             }
 
 			$app.css("-webkit-transition", "0s ease-in");
-        }
+        };
 	
 		// Start listening for open event
 		this.listen();
