@@ -9,7 +9,7 @@ $(document).ready(function(){
 	var slideOutNav = $('body').data('slideOutNav');
 	
 	// Example click event calling sideNav public method
-	$('#example').add('#nav a').hammer().on("tap", function(){
+	$('#close').add('#nav a').hammer().on("tap", function(){
 		
 		// Call var to access public methods
 		slideOutNav.close();

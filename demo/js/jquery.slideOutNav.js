@@ -159,8 +159,12 @@
 				// If drag
 				if (event.type === 'drag') {
 					
-					// disable browser scrolling
-					event.gesture.preventDefault();
+					// detect left/right direction
+					if (event.gesture.direction == "left" || event.gesture.direction == "right") {
+							
+						// disable vertical browser scroll
+						event.gesture.preventDefault();
+					}
 	
 					// stick to the finger
 	                var dragOffset = event.gesture.center.pageX,

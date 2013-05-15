@@ -416,9 +416,14 @@ body {
   z-index: 1;
   width: 220px;
   height: 100%;
+  padding: 0.5em 20px;
   background: #1c1c1c;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+#nav ul {
+  padding: 0;
+  margin: 0;
 }
 #nav li {
   display: block;
@@ -430,8 +435,23 @@ body {
 #nav li a {
   display: block;
   position: relative;
-  padding: 0.4em 10px;
+  padding: 0.4em 0;
   color: white;
+}
+#nav #close {
+  display: inline-block;
+  margin: 1em auto;
+  color: #ffffff;
+  background: #000000;
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+  border: solid 1px #484848;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
 }
 #app {
   display: block;
@@ -444,6 +464,10 @@ body {
   width: 100%;
   padding: 0;
   background: white;
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
   -webkit-box-shadow: -2px 0 8px 2px rgba(0, 0, 0, 0.95);
   -moz-box-shadow: -2px 0 8px 2px rgba(0, 0, 0, 0.95);
   box-shadow: -2px 0 8px 2px rgba(0, 0, 0, 0.95);
@@ -468,7 +492,6 @@ body {
   color: white;
   background: url(../../img/burger-btn.svg) no-repeat 50% 50%;
   background-size: 40% auto;
-  border: none;
   cursor: pointer;
   border: solid 1px #484848;
   -webkit-border-radius: 3px;
@@ -483,12 +506,9 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #efefef;
-  background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#222222));
-  background: -webkit-linear-gradient(top, #efefef, #222222);
-  background: -moz-linear-gradient(top, #efefef, #222222);
-  background: -ms-linear-gradient(top, #efefef, #222222);
-  background: -o-linear-gradient(top, #efefef, #222222);
+}
+.nav-open #app {
+  position: absolute;
 }
 /* ==========================================================================
    Helper classes
