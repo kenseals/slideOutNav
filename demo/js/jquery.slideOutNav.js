@@ -167,14 +167,27 @@
 						dragStart = event.gesture.startEvent.center.pageX,
 						offset = offset;
 						
-						if (state.open === true) {
-							var offset = dragOffset - (dragStart - navWidth);
-						} else {
-							var offset = dragOffset - dragStart;
+					if (state.open === true) {
+						var offset = dragOffset - (dragStart - navWidth);
+						
+						// If dragging left, move app container
+						if (dragOffset <= dragStart) {
+						
+							// Move app container
+			                moveAppContainer(offset);
 						}
 						
-					// Move app container
-	                moveAppContainer(offset);
+					} else {
+						var offset = dragOffset - dragStart;
+						
+						// If dragging right, move app container
+						if (dragOffset >= dragStart) {
+						
+							// Move app container
+			                moveAppContainer(offset);
+						}
+					}	
+					
 				}
 			
 				// If drag end
