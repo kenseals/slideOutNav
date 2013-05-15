@@ -48,7 +48,7 @@
 				$app = $('['+prefix+'="'+app+'"]'),
 				$content = $('['+prefix+'="'+content+'"]'),
 				navWidth = $nav.width();
-		};
+		}
 
 		this.open = function() {
 
@@ -60,13 +60,13 @@
 			// Unbind close events
 			$content.unbind(eventList);
 			
-			if (config.dragClose == true){
+			if (config.dragClose === true){
 					
 				// bind drag event for close
 				dragListen();	
 			}
 			
-			if (config.clickClose == true) {
+			if (config.clickClose === true) {
 				
 				// bind click event for close
 				contentClickListen();
@@ -90,13 +90,13 @@
 			// Add class to body for styling purposes
 			$('body').removeClass('nav-open').addClass('nav-closed');
 			
-			if (config.clickOpen == true) {
+			if (config.clickOpen === true) {
 			
 				// call burgerListen
 				burgerListen();
 			} 
 			
-			if (config.dragOpen == true) {
+			if (config.dragOpen === true) {
 			
 				// call dragListen
 				dragListen();	
@@ -110,7 +110,7 @@
 		var touchEvent = function() {
 
 			// If closed, open nav.
-			if (state.open == false) {
+			if (state.open === false) {
 				console.log('opening');
 				obj.open();
 			} else {
@@ -160,7 +160,7 @@
 				if (event.type === 'drag') {
 					
 					// detect left/right direction
-					if (event.gesture.direction == "left" || event.gesture.direction == "right") {
+					if (event.gesture.direction === "left" || event.gesture.direction === "right") {
 							
 						// disable vertical browser scroll
 						event.gesture.preventDefault();
@@ -175,7 +175,7 @@
 						var offset = dragOffset - (dragStart - navWidth);
 						
 						// If dragging left, move app container
-						if (event.gesture.direction == "left") {
+						if (event.gesture.direction === "left") {
 						
 							// Move app container
 			                moveAppContainer(offset);
@@ -185,7 +185,7 @@
 						var offset = dragOffset - dragStart;
 						
 						// If dragging right, move app container
-						if (event.gesture.direction == "right") {
+						if (event.gesture.direction === "right") {
 						
 							// Move app container
 			                moveAppContainer(offset);
@@ -206,7 +206,7 @@
 						
 						if (state.open === true) {
 							
-							if (event.gesture.direction == "left") {
+							if (event.gesture.direction === "left") {
 								closeAnim();
 								
 								// Fire touchEvent
@@ -215,7 +215,7 @@
 							
 						} else {
 							
-							if (event.gesture.direction == "right") {
+							if (event.gesture.direction === "right") {
 								openAnim();
 								
 								// Fire touchEvent
