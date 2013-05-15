@@ -158,7 +158,7 @@
 			
 				// If drag
 				if (event.type === 'drag') {
-	
+					
 					// disable browser scrolling
 					event.gesture.preventDefault();
 	
@@ -171,7 +171,7 @@
 						var offset = dragOffset - (dragStart - navWidth);
 						
 						// If dragging left, move app container
-						if (dragOffset <= dragStart) {
+						if (event.gesture.direction == "left") {
 						
 							// Move app container
 			                moveAppContainer(offset);
@@ -181,7 +181,7 @@
 						var offset = dragOffset - dragStart;
 						
 						// If dragging right, move app container
-						if (dragOffset >= dragStart) {
+						if (event.gesture.direction == "right") {
 						
 							// Move app container
 			                moveAppContainer(offset);
@@ -195,19 +195,30 @@
 					
 					console.log('released');
 	
+					// If moved more than 50%
 					if (Math.abs(event.gesture.deltaX) > navWidth/2) {
+						
 						console.log('more than 50%');
 						
 						if (state.open === true) {
 							
-							closeAnim();
+							if (event.gesture.direction == "left") {
+								closeAnim();
+								
+								// Fire touchEvent
+								touchEvent();
+							}
+							
 						} else {
 							
-							openAnim();
+							if (event.gesture.direction == "right") {
+								openAnim();
+								
+								// Fire touchEvent
+								touchEvent();
+							}
 						}
 		
-						// Fire touchEvent
-						touchEvent();
 					} else {
 						
 						if (state.open === true) {

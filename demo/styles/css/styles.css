@@ -393,7 +393,6 @@ textarea {
 body {
   display: block;
   position: relative;
-  height: 100%;
   -webkit-overflow-scrolling: touch;
 }
 /* apply a natural box layout model to all elements */
@@ -424,21 +423,24 @@ body {
 #nav li {
   display: block;
   position: relative;
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
 }
 #nav li a {
   display: block;
   position: relative;
   padding: 0.4em 10px;
   color: white;
-  background: red;
 }
 #app {
   display: block;
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   z-index: 2;
-  height: 100%;
+  min-height: 100%;
+  height: 2000px;
   width: 100%;
   padding: 0;
   background: white;
@@ -478,26 +480,15 @@ body {
 }
 #content {
   display: block;
+  position: relative;
   width: 100%;
   height: 100%;
-}
-.nav-open #nav,
-.nav-open #app {
-  position: absolute;
-}
-.nav-open #app {
-  left: 0;
-  -webkit-transform: translate(220px, 0);
-  -moz-transform: translate(220px, 0);
-  -ms-transform: translate(220px, 0);
-  -o-transform: translate(220px, 0);
-}
-.nav-closed #app {
-  left: 0;
-  -webkit-transform: translate(0, 0);
-  -moz-transform: translate(0, 0);
-  -ms-transform: translate(0, 0);
-  -o-transform: translate(0, 0);
+  background-color: #efefef;
+  background: -webkit-gradient(linear, left top, left bottom, from(#efefef), to(#222222));
+  background: -webkit-linear-gradient(top, #efefef, #222222);
+  background: -moz-linear-gradient(top, #efefef, #222222);
+  background: -ms-linear-gradient(top, #efefef, #222222);
+  background: -o-linear-gradient(top, #efefef, #222222);
 }
 /* ==========================================================================
    Helper classes
