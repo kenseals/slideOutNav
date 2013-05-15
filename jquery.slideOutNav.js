@@ -48,14 +48,11 @@
 				$app = $('['+prefix+'="'+app+'"]'),
 				$content = $('['+prefix+'="'+content+'"]'),
 				navWidth = $nav.width();
-		};
+		}
 
 		this.open = function() {
 
 			console.log('open');
-
-			// Add class to body for stying purposes
-			$('body').removeClass('nav-closed').addClass('nav-open');
 
 			// Animate App
 	        openAnim();
@@ -63,48 +60,43 @@
 			// Unbind close events
 			$content.unbind(eventList);
 			
-			if (config.dragClose == true){
+			if (config.dragClose === true){
 					
 				// bind drag event for close
 				dragListen();	
 			}
 			
-			if (config.clickClose == true) {
+			if (config.clickClose === true) {
 				
 				// bind click event for close
 				contentClickListen();
 			}
 
-			// Set state
-			state.open = true;
 		};
 		
 		this.close = function() {
 
 			console.log('close');
 
-			// Add class to body for styling purposes
-			$('body').removeClass('nav-open').addClass('nav-closed');
-
 			// Animate App
 	        closeAnim();	
 
 			// Unbind content click events
 			$content.unbind(eventNames.tap);
-
-			// Set state
-			state.open = false;
 		};
 		
 		this.listen = function() {
 			
-			if (config.clickOpen == true) {
+			// Add class to body for styling purposes
+			$('body').removeClass('nav-open').addClass('nav-closed');
+			
+			if (config.clickOpen === true) {
 			
 				// call burgerListen
 				burgerListen();
 			} 
 			
-			if (config.dragOpen == true) {
+			if (config.dragOpen === true) {
 			
 				// call dragListen
 				dragListen();	
@@ -118,13 +110,10 @@
 		var touchEvent = function() {
 
 			// If closed, open nav.
-			if (state.open == false) {
+			if (state.open === false) {
 				console.log('opening');
 				obj.open();
-			}
-
-			// Close nav.
-			else {
+			} else {
 				console.log('closing');
 				obj.close();
 			}	
@@ -169,23 +158,40 @@
 			
 				// If drag
 				if (event.type === 'drag') {
-	
-					// disable browser scrolling
-					event.gesture.preventDefault();
+					
+					// detect left/right direction
+					if (event.gesture.direction === "left" || event.gesture.direction === "right") {
+							
+						// disable vertical browser scroll
+						event.gesture.preventDefault();
+					}
 	
 					// stick to the finger
 	                var dragOffset = event.gesture.center.pageX,
 						dragStart = event.gesture.startEvent.center.pageX,
 						offset = offset;
 						
-						if (state.open === true) {
-							var offset = dragOffset - (dragStart - navWidth);
-						} else {
-							var offset = dragOffset - dragStart;
+					if (state.open === true) {
+						var offset = dragOffset - (dragStart - navWidth);
+						
+						// If dragging left, move app container
+						if (event.gesture.direction === "left") {
+						
+							// Move app container
+			                moveAppContainer(offset);
 						}
 						
-					// Move app container
-	                moveAppContainer(offset);
+					} else {
+						var offset = dragOffset - dragStart;
+						
+						// If dragging right, move app container
+						if (event.gesture.direction === "right") {
+						
+							// Move app container
+			                moveAppContainer(offset);
+						}
+					}	
+					
 				}
 			
 				// If drag end
@@ -193,19 +199,30 @@
 					
 					console.log('released');
 	
+					// If moved more than 50%
 					if (Math.abs(event.gesture.deltaX) > navWidth/2) {
+						
 						console.log('more than 50%');
 						
 						if (state.open === true) {
 							
-							closeAnim();
+							if (event.gesture.direction === "left") {
+								closeAnim();
+								
+								// Fire touchEvent
+								touchEvent();
+							}
+							
 						} else {
 							
-							openAnim();
+							if (event.gesture.direction === "right") {
+								openAnim();
+								
+								// Fire touchEvent
+								touchEvent();
+							}
 						}
 		
-						// Fire touchEvent
-						touchEvent();
 					} else {
 						
 						if (state.open === true) {
@@ -236,6 +253,16 @@
 			
 			$app.css("-webkit-transition", "0.2s ease-out");
 			
+			// After animation, add class to body for stying purposes
+			$app.bind("transitionend webkitTransitionEnd", function(){
+				
+				console.log('transition end')
+				
+				// Set state
+				state.open = false;
+				$('body').removeClass('nav-open').addClass('nav-closed');
+			});
+			
 			console.log('close anim');
 		};	
 		
@@ -255,6 +282,16 @@
             }
 			
 			$app.css("-webkit-transition", "0.2s ease-out");
+			
+			// After animation, add class to body for stying purposes
+			$app.bind("transitionend webkitTransitionEnd", function(){
+				
+				console.log('transition end');
+				
+				// Set state
+				state.open = true;
+				$('body').removeClass('nav-closed').addClass('nav-open');
+			});
 			
 			console.log('open anim');
 		};
