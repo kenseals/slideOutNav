@@ -9,6 +9,7 @@ body {
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .container {
+	z-index:1;
 	display:block;
 	position:relative;
 	min-height:480px;
@@ -28,12 +29,15 @@ body {
 	overflow-y:scroll;
 
 	li {
-		diplay:block;
+		display:block;
+		position:relative;
 	}
 	li a {
 		display:block;
+		position:relative;
 		padding:0.4em 10px;
 		color:white;
+		background:red;
 	}
 }
 
@@ -52,6 +56,7 @@ body {
 .app-header {
 	display:block;
 	position:relative;
+	z-index:1;
 	width:100%;
 	background:#1c1c1c;
 	padding:0.4em 3%;
@@ -90,7 +95,6 @@ body {
 	#app {
 		left:0;
 		.translate(@navW, 0);
-		// .transition(0.3s);
 	}
 }
 .nav-closed {
@@ -98,7 +102,6 @@ body {
 	#app {
 		left:0;
 		.translate(0, 0);
-		// .transition(0.2s);
 	}
 }
 

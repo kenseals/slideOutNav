@@ -403,6 +403,7 @@ body {
   box-sizing: border-box;
 }
 .container {
+  z-index: 1;
   display: block;
   position: relative;
   min-height: 480px;
@@ -421,12 +422,15 @@ body {
   overflow-y: scroll;
 }
 #nav li {
-  diplay: block;
+  display: block;
+  position: relative;
 }
 #nav li a {
   display: block;
+  position: relative;
   padding: 0.4em 10px;
   color: white;
+  background: red;
 }
 #app {
   display: block;
@@ -445,6 +449,7 @@ body {
 .app-header {
   display: block;
   position: relative;
+  z-index: 1;
   width: 100%;
   background: #1c1c1c;
   padding: 0.4em 3%;

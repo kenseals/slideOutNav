@@ -1,0 +1,1 @@
+$(document).ready(function(){$("body").slideOutNav({dragOpen:!0});var e=$("body").data("slideOutNav");$("#example").add("#nav a").hammer().on("tap",function(){e.close();return!1})});

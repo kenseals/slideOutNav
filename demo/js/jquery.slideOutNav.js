@@ -54,9 +54,6 @@
 
 			console.log('open');
 
-			// Add class to body for stying purposes
-			$('body').removeClass('nav-closed').addClass('nav-open');
-
 			// Animate App
 	        openAnim();
 			
@@ -75,28 +72,23 @@
 				contentClickListen();
 			}
 
-			// Set state
-			state.open = true;
 		};
 		
 		this.close = function() {
 
 			console.log('close');
 
-			// Add class to body for styling purposes
-			$('body').removeClass('nav-open').addClass('nav-closed');
-
 			// Animate App
 	        closeAnim();	
 
 			// Unbind content click events
 			$content.unbind(eventNames.tap);
-
-			// Set state
-			state.open = false;
 		};
 		
 		this.listen = function() {
+			
+			// Add class to body for styling purposes
+			$('body').removeClass('nav-open').addClass('nav-closed');
 			
 			if (config.clickOpen == true) {
 			
@@ -121,10 +113,7 @@
 			if (state.open == false) {
 				console.log('opening');
 				obj.open();
-			}
-
-			// Close nav.
-			else {
+			} else {
 				console.log('closing');
 				obj.close();
 			}	
@@ -236,6 +225,16 @@
 			
 			$app.css("-webkit-transition", "0.2s ease-out");
 			
+			// After animation, add class to body for stying purposes
+			$app.bind("transitionend webkitTransitionEnd", function(){
+				
+				console.log('transition end')
+				
+				// Set state
+				state.open = false;
+				$('body').removeClass('nav-open').addClass('nav-closed');
+			});
+			
 			console.log('close anim');
 		};	
 		
@@ -255,6 +254,16 @@
             }
 			
 			$app.css("-webkit-transition", "0.2s ease-out");
+			
+			// After animation, add class to body for stying purposes
+			$app.bind("transitionend webkitTransitionEnd", function(){
+				
+				console.log('transition end');
+				
+				// Set state
+				state.open = true;
+				$('body').removeClass('nav-closed').addClass('nav-open');
+			});
 			
 			console.log('open anim');
 		};
