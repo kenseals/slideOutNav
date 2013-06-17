@@ -184,6 +184,13 @@
 							}
 						}
 						
+						// Detect vertical scroll
+						if (event.gesture.direction === "up" || event.gesture.direction === "down"){
+							
+							// Prevent vertical scroll on touch device
+							event.gesture.preventDefault();
+						}
+						
 					} else {
 						var offset = dragOffset - dragStart;
 						
@@ -265,6 +272,7 @@
 				state.open = false;
 				$('body').removeClass('nav-open').addClass('nav-closed');
 				
+				// Allow app container to be scrollable again (for non-touch device)
 				$app.css({
 					"position": "relative",
 					"overflow-y": "auto"
@@ -300,6 +308,7 @@
 				state.open = true;
 				$('body').removeClass('nav-closed').addClass('nav-open');
 				
+				// Keep app container from being scrollable on non-touch device
 				$app.css({
 					"position": "absolute",
 					"overflow-y": "hidden"
