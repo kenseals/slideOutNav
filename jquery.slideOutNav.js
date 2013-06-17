@@ -277,6 +277,9 @@
 					"position": "relative",
 					"overflow-y": "auto"
 				});
+				
+				// TODO Set nav scroll position to 0
+				$nav.scrollTop(0);
 			});
 			
 			console.log('close anim');
