@@ -313,6 +313,9 @@
 					"position": "absolute",
 					"overflow-y": "hidden"
 				});
+				
+				// TODO Set nav scroll position to 0
+				// 
 			});
 			
 			console.log('open anim');
