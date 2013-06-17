@@ -176,9 +176,12 @@
 						
 						// If dragging left, move app container
 						if (event.gesture.direction === "left") {
-						
-							// Move app container
-			                moveAppContainer(offset);
+							
+							// Prevent sliding past left side of viewport
+							if (offset >= 0) {
+								// Move app container
+				                moveAppContainer(offset);
+							}
 						}
 						
 					} else {
@@ -261,6 +264,11 @@
 				// Set state
 				state.open = false;
 				$('body').removeClass('nav-open').addClass('nav-closed');
+				
+				$app.css({
+					"position": "relative",
+					"overflow-y": "auto"
+				});
 			});
 			
 			console.log('close anim');
@@ -291,6 +299,11 @@
 				// Set state
 				state.open = true;
 				$('body').removeClass('nav-closed').addClass('nav-open');
+				
+				$app.css({
+					"position": "absolute",
+					"overflow-y": "hidden"
+				});
 			});
 			
 			console.log('open anim');

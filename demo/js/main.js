@@ -5,6 +5,8 @@ $(document).ready(function(){
 		dragOpen: true
 	});
 	
+	$('body').slideOutNav();
+	
 	// Save so its public methods are accessible
 	var slideOutNav = $('body').data('slideOutNav');
 	
