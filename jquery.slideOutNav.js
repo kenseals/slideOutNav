@@ -278,7 +278,7 @@
 					"overflow-y": "auto"
 				});
 				
-				// TODO Set nav scroll position to 0
+				// Set nav scroll position to 0
 				$nav.scrollTop(0);
 			});
 			
