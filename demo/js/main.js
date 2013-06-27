@@ -2,7 +2,7 @@ $(document).ready(function(){
 	
 	// Init sideNav
 	$('body').slideOutNav({
-		dragOpen: false
+		dragOpen: true
 	});
 	
 	$('body').slideOutNav();
