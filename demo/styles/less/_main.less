@@ -13,6 +13,24 @@ body {
 /* apply a natural box layout model to all elements */
 * { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
+.demo-header {
+	.inner-shadow (0, -3px, 9px, 0, 0.25);
+	
+	display:block;
+	position:relative;
+	background:#e5e5e5;
+	padding:2.2em @appPadding;
+	
+	a {
+		font-size:0.85em;
+		
+		&:link, &:visited {
+			text-decoration:none;
+			color:#39c;
+		}
+	}
+}
+
 .container {
 	z-index:1;
 	display:block;
@@ -84,7 +102,7 @@ body {
 	z-index:1;
 	width:100%;
 	background:#1c1c1c;
-	padding:0.4em 3%;
+	padding:0.4em @appPadding;
 
 	#burger {
 		display:block;
